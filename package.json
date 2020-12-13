@@ -13,15 +13,16 @@
   "author": "Eden Gress <gresseden@gmail.com> (https://www.facebook.com/liledn.mexikn)",
   "license": "MIT",
   "dependencies": {
-    "connect-history-api-fallback": "^1.6.0",
-    "cors": "^2.8.5",
-    "express": "^4.17.1",
-    "morgan": "^1.10.0",
-    "nodemon": "^2.0.6",
     "@babel/cli": "^7.12.10",
     "@babel/core": "^7.12.10",
     "@babel/node": "^7.12.10",
-    "@babel/preset-env": "^7.12.10"
+    "@babel/preset-env": "^7.12.10",
+    "connect-history-api-fallback": "^1.6.0",
+    "cors": "^2.8.5",
+    "express": "^4.17.1",
+    "mongoose": "^5.11.7",
+    "morgan": "^1.10.0",
+    "nodemon": "^2.0.6"
   },
   "devDependencies": {
     "@babel/cli": "^7.12.10",

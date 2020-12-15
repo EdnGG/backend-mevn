@@ -9,7 +9,13 @@ const app = express()
 /*
   DB Connection
 */
-const uri = 'mongodb://localhost:27017/mevn'
+
+// Conexion local
+// const uri = 'mongodb://localhost:27017/mevn'
+
+// Conexion en la nube
+const uri = 'mongodb+srv://user-mevn:WKBcQor9jVRWpQny@mevn-udemy.c4jbc.mongodb.net/udemy?retryWrites=true&w=majority'
+
 const options = {
   useNewUrlParser: true,
   useCreateIndex: true,

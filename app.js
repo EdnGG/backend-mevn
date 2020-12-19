@@ -11,10 +11,10 @@ const app = express()
 */
 
 // Conexion local
-// const uri = 'mongodb://localhost:27017/mevn'
+const uri = 'mongodb://localhost:27017/mevn'
 
 // Conexion en la nube
-const uri = 'mongodb+srv://user-mevn:WKBcQor9jVRWpQny@mevn-udemy.c4jbc.mongodb.net/udemy?retryWrites=true&w=majority'
+// const uri = 'mongodb+srv://user-mevn:WKBcQor9jVRWpQny@mevn-udemy.c4jbc.mongodb.net/udemy?retryWrites=true&w=majority'
 
 const options = {
   useNewUrlParser: true,
@@ -71,4 +71,12 @@ app.listen(app.get('Port'), () => {
 
 /*
 npm i mongoose-unique-validator --save
+*/
+
+
+/*
+
+note # 2
+description # 2
+
 */

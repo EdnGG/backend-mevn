@@ -45,15 +45,40 @@ router.get('/nota/:id', async(req, res) => {
 })
 
 // Get con todos los documentos
+
+// router.get('/nota', verificarAuth , async(req, res) => {
+//   // const _id = req.params.id
+//   const usuarioId = req.usuario._id
+//   try {
+//     const notaDB = await Nota.find({usuarioId})
+//     res.json(notaDB)
+//   } catch (error) {
+//     return res.status(400).json({
+//       mensaje: 'something was wrong getting all documents',
+//       error
+//     })
+//   }
+// })
+
+// Get con paginacion
 router.get('/nota', verificarAuth , async(req, res) => {
   // const _id = req.params.id
+
   const usuarioId = req.usuario._id
+  const limit = Number(req.query.limit) || 5
+  const skip = Number(req.query.skip) || 0
+
   try {
-    const notaDB = await Nota.find({usuarioId})
-    res.json(notaDB)
+    const notaDB = await Nota.find({ usuarioId }).limit(limit).skip(skip)
+    
+    // Contar documentos
+    const totalNotas = await Nota.find({usuarioId}).countDocuments()
+
+    res.json({ notaDB, totalNotas })
+    
   } catch (error) {
     return res.status(400).json({
-      mensaje: 'something was wrong on get using params',
+      mensaje: 'something were wrong',
       error
     })
   }

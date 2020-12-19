@@ -1,13 +1,21 @@
 import express from 'express'
 const router = express.Router()
 
+const {verificarAuth, verificarAdministrador } = require('../middlewares/autenticacion')
+
 // Importar el modelo nota
 import Nota from '../models/nota.js'
 
 // agregar una nota
-router.post('/nueva-nota', async (req, res) => {
+router.post('/nueva-nota', verificarAuth , async (req, res) => {
   // 'req' es lo que envias 'res' es lo que responde el servidor
   const body = req.body
+  /* 'req.usuario._id' tiene el token que se lee desde la autenticacion.js
+  se almacena de esta forma porque con esa info vamos a filtrar
+  las notas por usuario
+  */
+  body.usuarioId = req.usuario._id
+
   try {
     const notaDB = await Nota.create(body)
     console.log(notaDB)
@@ -37,10 +45,11 @@ router.get('/nota/:id', async(req, res) => {
 })
 
 // Get con todos los documentos
-router.get('/nota', async(req, res) => {
+router.get('/nota', verificarAuth , async(req, res) => {
   // const _id = req.params.id
+  const usuarioId = req.usuario._id
   try {
-    const notaDB = await Nota.find()
+    const notaDB = await Nota.find({usuarioId})
     res.json(notaDB)
   } catch (error) {
     return res.status(400).json({

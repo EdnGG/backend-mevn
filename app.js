@@ -11,10 +11,10 @@ const app = express()
 */
 
 // Conexion local
-// const uri = 'mongodb://localhost:27017/mevn'
+const uri = 'mongodb://localhost:27017/mevn'
 
 // Conexion en la nube
-const uri = 'mongodb+srv://user-mevn:WKBcQor9jVRWpQny@mevn-udemy.c4jbc.mongodb.net/udemy?retryWrites=true&w=majority'
+// const uri = 'mongodb+srv://user-mevn:WKBcQor9jVRWpQny@mevn-udemy.c4jbc.mongodb.net/udemy?retryWrites=true&w=majority'
 
 const options = {
   useNewUrlParser: true,
@@ -42,7 +42,7 @@ app.use(express.json())
 */
 app.use(express.urlencoded({ extended: true }))
 
-// La ruta de abajo siempre debe de estar antes de la configuracion del 
+// La ruta de abajo siempre debe de estar antes del middleware de la configuracion del 
 // histoy Middleware para vue.js
 
 // app.get('/', (req, res) => {
@@ -51,6 +51,8 @@ app.use(express.urlencoded({ extended: true }))
 // })
 
 app.use('/api', require('./routes/nota'))
+app.use('/api', require('./routes/user'))
+app.use('/api/login', require('./routes/login'))
 
 // Midleware para vue.js router modo history
 const history = require('connect-history-api-fallback')
@@ -65,3 +67,8 @@ app.set('Port', process.env.PORT || 3000)
 app.listen(app.get('Port'), () => {
   console.log('port listeninig on: ', app.get('Port') )
 })
+
+
+/*
+npm i mongoose-unique-validator --save
+*/

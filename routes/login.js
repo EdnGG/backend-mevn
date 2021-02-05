@@ -21,6 +21,7 @@ router.post('/', async (req, res) => {
     // Validating Password
     if (!bcrypt.compareSync(body.pass, usuarioDB.pass)) {
       return res.status(400).json({
+        
         mensaje: 'Wrong password '
       })
     }

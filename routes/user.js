@@ -1,6 +1,7 @@
 import express from 'express'
 const router = express.Router()
 
+// Importar el modelo User
 import User from '../models/user.js'
 
 const {verificarAuth, verificarAdministrador } = require('../middlewares/autenticacion')
@@ -9,13 +10,14 @@ const {verificarAuth, verificarAdministrador } = require('../middlewares/autenti
 const bcrypt = require('bcrypt')
 const saltRounds = 10
 
-//Filter fields on PUT
+//Filtering fields on http-PUT
 const _ = require('underscore')
 
-// Importar el modelo User
+
 
 // POST User
-router.post('/new-user', async (req, res) => {
+router.post('/signup', async (req, res) => {
+// router.post('/new-user', async (req, res) => {
   // const body = req.body
   const body = {
     nombre: req.body.nombre,
@@ -23,10 +25,12 @@ router.post('/new-user', async (req, res) => {
     role: req.body.role
   }
   
+  // Envriptando el password
   body.pass = bcrypt.hashSync(req.body.pass, saltRounds)
 
   try {
     const usuarioDB = await User.create(body)
+    // Guardando el usuario en MongoDB
     res.json(usuarioDB)
     
   } catch (error) {

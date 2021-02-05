@@ -11,10 +11,10 @@ const app = express()
 */
 
 // Conexion local
-// const uri = 'mongodb://localhost:27017/mevn'
+const uri = 'mongodb://localhost:27017/mevn'
 
 // Conexion en la nube
-const uri = 'mongodb+srv://user-mevn:WKBcQor9jVRWpQny@mevn-udemy.c4jbc.mongodb.net/udemy?retryWrites=true&w=majority'
+// const uri = 'mongodb+srv://user-mevn:WKBcQor9jVRWpQny@mevn-udemy.c4jbc.mongodb.net/udemy?retryWrites=true&w=majority'
 
 const options = {
   useNewUrlParser: true,
@@ -53,6 +53,7 @@ app.use(express.urlencoded({ extended: true }))
 app.use('/api', require('./routes/nota'))
 app.use('/api', require('./routes/user'))
 app.use('/api/login', require('./routes/login'))
+// app.use('/api/signup', require('./routes/signup'))
 
 // Midleware para vue.js router modo history
 const history = require('connect-history-api-fallback')

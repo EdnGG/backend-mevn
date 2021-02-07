@@ -18,7 +18,8 @@ const userSchema = new Schema({
   pass: { type: String, required: [true, 'Password is required'] },
   date: { type: Date, default: Date.now },
   role: { type: String, default: 'USER', enum: roles },
-  activo: {type: Boolean, default: true}
+  activo: { type: Boolean, default: true },
+  image: { type: String, required: false }
 })
 
 /* { PATH } Sera reemplazado por el campo con el atributo 'unique' declarado

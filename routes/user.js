@@ -1,6 +1,8 @@
 import express from 'express'
 const router = express.Router()
 
+const jwt = require('jsonwebtoken')
+
 // Importar el modelo User
 import User from '../models/user.js'
 
@@ -13,26 +15,73 @@ const saltRounds = 10
 //Filtering fields on http-PUT
 const _ = require('underscore')
 
-
-
 // POST User
-router.post('/signup', async (req, res) => {
-// router.post('/new-user', async (req, res) => {
-  // const body = req.body
+router.post('/signup' ,async (req, res) => {
+
+console.log(req.files)
+
+  console.log(req.body.image)
   const body = {
     nombre: req.body.nombre,
     email: req.body.email,
-    role: req.body.role
+    role: req.body.role,
+    image: req.body.image
   }
-  
-  // Envriptando el password
+  console.log(body)
+  // Encriptando el password
   body.pass = bcrypt.hashSync(req.body.pass, saltRounds)
 
   try {
+    let archivo = req.files.archivo
+    console.log('archivo' ,archivo)
+  // separara el nombre del archivo en cuanto encuentre un punto '.'
+  let nombreArchivoCortado = archivo.name.split('.')
+  // Obtenemos la ultima posicion del arreglo
+  let extension = nombreArchivoCortado[nombreArchivoCortado.length -1]
+  
+  let extensionesValidas = ['png', 'jpg', 'gif', 'jpeg']
+
+  // Valida si "extension" esta en alguna posicion index del areglo 'extencionesValidas'
+  if (extensionesValidas.indexOf(extension) < 0) {
+    return res.status(400).json({
+      ok: false,
+      err: {
+        
+        message: 'Allowed extensions are: ' + extensionesValidas.join(', '),
+        ext: extension
+      }
+    })
+
+  }
+  archivo.mv(`upload/archivo-${new Date().getMilliseconds()}.${extension}`, (err) => {
+   if (err) {
+      return res.status(500).json({
+        ok: false,
+        err
+        // console.log(err)
+       
+      })
+    }
+      return res.json({
+        ok: true,
+        message: 'Image was sucessfully uploaded'
+      
+      })
+  })
+
+  // Guardando el usuario en MongoDB
     const usuarioDB = await User.create(body)
-    // Guardando el usuario en MongoDB
-    res.json(usuarioDB)
-    
+    /* Aqui genero el token porque pienso que para poder arreglar el error de
+    navigation guard que me da vue lo podria solucionar*/
+    // Generar token
+    const token = jwt.sign({
+      data: usuarioDB
+    }, 'secret', {expiresIn: 60 * 60})
+
+    res.json({
+      usuarioDB,
+      token
+    })
   } catch (error) {
     return res.status(500).json({
       mensaje: 'Something was wrong',

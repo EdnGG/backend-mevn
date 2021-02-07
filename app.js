@@ -4,7 +4,13 @@ import cors from 'cors'
 import path from 'path'
 import mongoose from 'mongoose'
 
+import fileUpload from 'express-fileupload'
+
 const app = express()
+
+// app.use(fileUpload({useTempFiles: true}))
+
+
 
 /*
   DB Connection
@@ -31,6 +37,11 @@ mongoose.connect(uri, options).then(
   } 
 )
 
+
+app.use(fileUpload({ useTempFiles: true }))
+// app.use(fileUpload())
+
+
 app.use(morgan('tiny'))
 //'CORS' permite acceder a la app desde otro dominio
 app.use(cors())
@@ -52,8 +63,9 @@ app.use(express.urlencoded({ extended: true }))
 
 app.use('/api', require('./routes/nota'))
 app.use('/api', require('./routes/user'))
+app.use('/api', require('./routes/upload'))
 app.use('/api/login', require('./routes/login'))
-// app.use('/api/signup', require('./routes/signup'))
+// app.use('/api/upload', require('./routes/upload'))
 
 // Midleware para vue.js router modo history
 const history = require('connect-history-api-fallback')

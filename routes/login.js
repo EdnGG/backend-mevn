@@ -16,7 +16,7 @@ router.post('/', async (req, res) => {
       return res.status(400).json({
         mensaje: 'Email not found'
       })
-    }
+    } 
 
     // Validating Password
     if (!bcrypt.compareSync(body.pass, usuarioDB.pass)) {

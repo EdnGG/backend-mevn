@@ -25,49 +25,47 @@ console.log(req.files)
     nombre: req.body.nombre,
     email: req.body.email,
     role: req.body.role,
-    image: req.body.image
+    // image: req.body.image
   }
-  console.log(body)
+  // console.log(body)
   // Encriptando el password
   body.pass = bcrypt.hashSync(req.body.pass, saltRounds)
 
   try {
-    let archivo = req.files.archivo
-    console.log('archivo' ,archivo)
+    // let archivo = req.files.archivo
   // separara el nombre del archivo en cuanto encuentre un punto '.'
-  let nombreArchivoCortado = archivo.name.split('.')
+  // let nombreArchivoCortado = archivo.name.split('.')
   // Obtenemos la ultima posicion del arreglo
-  let extension = nombreArchivoCortado[nombreArchivoCortado.length -1]
+  // let extension = nombreArchivoCortado[nombreArchivoCortado.length -1]
   
-  let extensionesValidas = ['png', 'jpg', 'gif', 'jpeg']
+  // let extensionesValidas = ['png', 'jpg', 'gif', 'jpeg']
 
   // Valida si "extension" esta en alguna posicion index del areglo 'extencionesValidas'
-  if (extensionesValidas.indexOf(extension) < 0) {
-    return res.status(400).json({
-      ok: false,
-      err: {
+    
+  // if (extensionesValidas.indexOf(extension) < 0) {
+  //   return res.status(400).json({
+  //     ok: false,
+  //     err: {
         
-        message: 'Allowed extensions are: ' + extensionesValidas.join(', '),
-        ext: extension
-      }
-    })
+  //       message: 'Allowed extensions are: ' + extensionesValidas.join(', '),
+  //       ext: extension
+  //     }
+  //   })
 
-  }
-  archivo.mv(`upload/archivo-${new Date().getMilliseconds()}.${extension}`, (err) => {
-   if (err) {
-      return res.status(500).json({
-        ok: false,
-        err
-        // console.log(err)
-       
-      })
-    }
-      return res.json({
-        ok: true,
-        message: 'Image was sucessfully uploaded'
-      
-      })
-  })
+  // }
+    
+  // archivo.mv(`upload/archivo-${new Date().getMilliseconds()}.${extension}`, (err) => {
+  //  if (err) {
+  //     return res.status(500).json({
+  //       ok: false,
+  //       err       
+  //     })
+  //   }
+  //     return res.json({
+  //       ok: true,
+  //       message: 'Image was sucessfully uploaded'
+  //     })
+  // })
 
   // Guardando el usuario en MongoDB
     const usuarioDB = await User.create(body)

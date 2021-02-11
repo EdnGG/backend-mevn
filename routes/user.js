@@ -25,7 +25,7 @@ console.log(req.files)
     nombre: req.body.nombre,
     email: req.body.email,
     role: req.body.role,
-    image: req.body.image
+    // image: req.body.image
   }
   console.log(body)
   // Encriptando el password
@@ -83,6 +83,7 @@ console.log(req.files)
       token
     })
   } catch (error) {
+    //Companero aqui entra en este catch, no genera el usuario y muestra en consola el error acerca de "salt y data" que estan relacionados con bcrypt
     return res.status(500).json({
       mensaje: 'Something was wrong',
       error

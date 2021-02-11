@@ -4,12 +4,9 @@ import cors from 'cors'
 import path from 'path'
 import mongoose from 'mongoose'
 
-import fileUpload from 'express-fileupload'
+// import fileUpload from 'express-fileupload'
 
 const app = express()
-
-// app.use(fileUpload({useTempFiles: true}))
-
 
 
 /*
@@ -17,10 +14,10 @@ const app = express()
 */
 
 // Conexion local
-// const uri = 'mongodb://localhost:27017/mevn'
+const uri = 'mongodb://localhost:27017/mevn'
 
 // Conexion en la nube
-const uri = 'mongodb+srv://user-mevn:WKBcQor9jVRWpQny@mevn-udemy.c4jbc.mongodb.net/udemy?retryWrites=true&w=majority'
+// const uri = 'mongodb+srv://user-mevn:WKBcQor9jVRWpQny@mevn-udemy.c4jbc.mongodb.net/udemy?retryWrites=true&w=majority'
 
 const options = {
   useNewUrlParser: true,
@@ -37,10 +34,8 @@ mongoose.connect(uri, options).then(
   } 
 )
 
-
-app.use(fileUpload({ useTempFiles: true }))
+// app.use(fileUpload({ useTempFiles: true }))
 // app.use(fileUpload())
-
 
 app.use(morgan('tiny'))
 //'CORS' permite acceder a la app desde otro dominio

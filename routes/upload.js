@@ -47,10 +47,12 @@ router.put('/upload/:id', (req, res) => {
       }
     })
   }
+    
+  uploadImageCloudinary(_id, filePath, res)
+    
+  
 
-  uploadImageCloudinary(_id, filePath)
-
-  uploadImage(archivo, extension)
+  // uploadImage(archivo, extension)
 
   } catch (err) {
     console.log('Error: ', err)
@@ -75,7 +77,7 @@ function uploadImage(archivo, extension) {
   })
 }
 
-function uploadImageCloudinary(_id, image) {
+function uploadImageCloudinary(_id, image, res) {
   cloudinary.uploader.upload(image, { tags: 'basic_sample' }, function (error, result) {
     if (error) {
       console.log('Error al subir a cloudinary', error)
@@ -85,10 +87,14 @@ function uploadImageCloudinary(_id, image) {
         if (err) {
           console.log('Error al relacionar usuario')
         } else {
-          // response.image = result.url
           usuarioDB.image = result.url
-          usuarioDB.save()
-          console.log('Usuario ya guardado con la imagen: ', usuarioDB)
+          //console.log('Usuario ya guardado con la imagen: ', usuarioDB)
+          usuarioDB.save((err, newUsuarioDB) => {
+            //console.log(newUsuarioDB)
+            return res.json({
+              usuarioDB: newUsuarioDB
+            })
+          })          
         }
       })
     }

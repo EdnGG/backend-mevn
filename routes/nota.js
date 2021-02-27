@@ -33,6 +33,7 @@ router.post('/nueva-nota', verificarAuth , async (req, res) => {
 // Get con parametros
 router.get('/nota/:id', async(req, res) => {
   const _id = req.params.id
+  console.log('ID: ', _id)
   try {
     const notaDB = await Nota.findOne({ _id })
     res.json(notaDB)

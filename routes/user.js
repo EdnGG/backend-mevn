@@ -17,10 +17,6 @@ const _ = require('underscore')
 
 router.use(fileUpload({useTempFiles: true}))
 
-// POST User (Create new user)
-router.post('/signup', async (req, res) => {
-
- try {
   const body = {
     nombre: req.body.nombre,
     email: req.body.email,
@@ -29,48 +25,7 @@ router.post('/signup', async (req, res) => {
   }
   // Encriptando el password
   body.pass = bcrypt.hashSync(req.body.pass, saltRounds)
- 
-  // Guardando el usuario en MongoDB
-    const usuarioDB = await User.create(body)
-    console.log('guardando info de usuario en objeto usuario DB' ,usuarioDB)
-    
-    // Generar token
-    const token = jwt.sign({
-      data: usuarioDB
-    }, 'secret', { expiresIn: 60 * 60 })
-   
-/*************************** */
-  console.log('dentro de req.files',req.files)
-  let imagen = req.files.image
-  console.log('contenido de imagen ',imagen)
-  let nombreArchivoCortado = imagen.name.split('.')
-  let extension = nombreArchivoCortado[nombreArchivoCortado.length -1]
-  let extensionesValidas = ['png', 'jpg', 'gif', 'jpeg']
-    
-  if (extensionesValidas.indexOf(extension) < 0) {
-    return res.status(500).json({
-      ok: false,
-      err: {
-        message: 'Allowed extensions are: ' + extensionesValidas.join(', '),
-        ext: extension
-      }
-    })
-  }
-    
-  imagen.mv(`upload/archivo-${new Date().getMilliseconds()}.${extension}`, (err) => {
-    if (err) {
-    //  console.log('Error en el metodo mv ' ,err)
-      return res.status(500).json({
-        ok: false,
-        message: 'Error tratando de subir imagen',
-        err       
-      })
-    }
-      return res.json({
-        ok: true,
-        message: 'Image was sucessfully uploaded'
-      })
-  })
+  try {
 
 /************************** */
 
@@ -82,9 +37,8 @@ router.post('/signup', async (req, res) => {
 
 
   } catch (error) {
-    // Error al subir la imagen y creacion de usuario
-    // console.log('usuario DB' ,usuarioDB)
-    console.log('Usuario no se pudo crear ', error.message)
+    //Companero aqui entra en este catch, no genera el usuario y muestra en consola el error acerca de "salt y data" que estan relacionados con bcrypt
+    console.log('El Error pasa por aqui')
     return res.status(500).json({
       mensaje: 'Something was wrong',
       error

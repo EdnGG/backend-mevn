@@ -82,7 +82,7 @@ function uploadImageCloudinary(_id, image, res) {
         if (err) {
           console.log('Error al relacionar usuario')
         } else {
-          usuarioDB.image = result.url
+          usuarioDB.image = result.secure_url
           //console.log('Usuario ya guardado con la imagen: ', usuarioDB)
           usuarioDB.save((err, newUsuarioDB) => {
             //console.log(newUsuarioDB)
@@ -95,6 +95,13 @@ function uploadImageCloudinary(_id, image, res) {
     }
   })
 }
+
+// function updateImage(imagen) {
+//   const nombreArray = modelo.img.split('/')
+//   const nombre = nombreArray[nombreArray.length - 1]
+//   const [ public_id ] = nombre.split('.')
+//   cloudinary.uploader.destroy(public_id)
+// }
 
 /*********** Actualizar imagen usuario ***************** */
 

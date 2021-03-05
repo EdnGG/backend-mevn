@@ -5,21 +5,15 @@ import morgan from 'morgan'
 import cors from 'cors'
 import path from 'path'
 import mongoose from 'mongoose'
-
-// import fileUpload from 'express-fileupload'
+import fileUpload from 'express-fileupload'
 
 const app = express()
 
-
-/*
-  DB Connection
-*/
-
 // Conexion local
-// const uri = 'mongodb://localhost:27017/mevn'
+const uri = 'mongodb://localhost:27017/mevn'
 
 // Conexion en la nube
-const uri = 'mongodb+srv://user-mevn:WKBcQor9jVRWpQny@mevn-udemy.c4jbc.mongodb.net/udemy?retryWrites=true&w=majority'
+// const uri = 'mongodb+srv://user-mevn:WKBcQor9jVRWpQny@mevn-udemy.c4jbc.mongodb.net/udemy?retryWrites=true&w=majority'
 
 const options = {
   useNewUrlParser: true,
@@ -30,13 +24,11 @@ mongoose.connect(uri, options).then(
   () => {
     console.log('conectado a Mongo DB')
   }, err => {
-    // El error se puede pintar directo sin pasarlo a un console
-    // console.log(err)
     err
   } 
 )
 
-// app.use(fileUpload({ useTempFiles: true }))
+app.use(fileUpload({ useTempFiles: true }))
 // app.use(fileUpload())
 
 app.use(morgan('tiny'))

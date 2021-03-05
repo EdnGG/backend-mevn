@@ -15,36 +15,39 @@ const saltRounds = 10
 //Filtering fields on http-PUT
 const _ = require('underscore')
 
-router.use(fileUpload({useTempFiles: true}))
+// router.use(fileUpload({ useTempFiles: true }))
+// POST  New User
+router.post('/signup', async (req, res) => {
 
   const body = {
     nombre: req.body.nombre,
     email: req.body.email,
     role: req.body.role,
-    pass: req.body.pass
+    // pass: req.body.pass
   }
   // Encriptando el password
   body.pass = bcrypt.hashSync(req.body.pass, saltRounds)
   try {
 
 /************************** */
+  const usuarioDB = await User.create(body)
+    res.json(usuarioDB)
 
-
-    res.json({
-      usuarioDB,
-      token
-    })
+    // res.json({
+    //   usuarioDB,
+    //   token
+    // })
 
 
   } catch (error) {
-    //Companero aqui entra en este catch, no genera el usuario y muestra en consola el error acerca de "salt y data" que estan relacionados con bcrypt
-    console.log('El Error pasa por aqui')
     return res.status(500).json({
       mensaje: 'Something was wrong',
       error
     })
   }
 })
+
+
 
 // PUT User (Actualizar usuario)
 router.put('/user/:id', [verificarAuth, verificarAdministrador], async(req, res) => { 

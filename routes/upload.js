@@ -3,18 +3,15 @@ const router = express.Router()
 
 // CLOUDINARY
 const cloudinary = require('cloudinary').v2;
-cloudinary.config(process.env.CLOUDINARY_URL) 
+cloudinary.config(process.env.CLOUDINARY_URL)
 
 import User from '../models/user.js'
 
 router.put('/upload/:id', (req, res) => {
-
   const _id = req.params.id
-  const filePath = req.files.image.tempFilePath
-  console.log('Dentro de req.params: ', _id)
-  console.log('req.files.image.tempFilePath: ', req.files.image.tempFilePath)
+  console.log('req.files: ', req.files)
+  
   try {
-
   if (!req.files) {
     return res.status(400).json({
       ok: false,
@@ -34,19 +31,18 @@ router.put('/upload/:id', (req, res) => {
   // Extensiones permitidas
   let extensionesValidas = ['png', 'jpg', 'gif', 'jpeg', 'JPG']
 
-  // Valida si "extension" esta en alguna posicion index del areglo 'extencionesValidas'
+  // Valida si "extension" esta en alguna posicion index del arreglo 'extencionesValidas'
   if (extensionesValidas.indexOf(extension) < 0) {
     return res.status(400).json({
       ok: false,
       err: {
-        // Si se manda el error de esta forma todo queda junto
-        // message: 'Allowed extensions are: ' + extencionesValidas
-        // Si se manda el error de esta forma todo queda separado
         message: 'Allowed extensions are: ' + extensionesValidas.join(', '),
         ext: extension
       }
     })
   }
+    
+  const filePath = req.files.image.tempFilePath
     
   uploadImageCloudinary(_id, filePath, res)
     
@@ -55,13 +51,13 @@ router.put('/upload/:id', (req, res) => {
   // uploadImage(archivo, extension)
 
   } catch (err) {
-    console.log('Error: ', err)
+    console.log('Error dentro de la peticion: ', err)
   }
 })
 
 
 
-function uploadImage(archivo, extension) {
+function uploadImage(archivo, extension, res) {
   archivo.mv(`upload/usuarios/imagen-${new Date().getMilliseconds()}.${extension}`, (err, res) => {
     if (err) {
       return res.status(500).json({
@@ -69,12 +65,11 @@ function uploadImage(archivo, extension) {
         err
       })
     }
-    //   res.json({
-    //     ok: true,
-    //     message: 'Image was sucessfully uploaded on backend'
-    //   })
-    // })
   })
+  return res.json({
+      ok: true,
+      message: 'Image was sucessfully uploaded on backend'
+    })
 }
 
 function uploadImageCloudinary(_id, image, res) {
@@ -94,7 +89,7 @@ function uploadImageCloudinary(_id, image, res) {
             return res.json({
               usuarioDB: newUsuarioDB
             })
-          })          
+          })
         }
       })
     }

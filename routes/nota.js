@@ -46,27 +46,26 @@ router.get('/nota/:id', async(req, res) => {
 })
 
 // Get con todos los documentos
-
-// router.get('/nota', verificarAuth , async(req, res) => {
-//   // const _id = req.params.id
-//   const usuarioId = req.usuario._id
-//   try {
-//     const notaDB = await Nota.find({usuarioId})
-//     res.json(notaDB)
-//   } catch (error) {
-//     return res.status(400).json({
-//       mensaje: 'something was wrong getting all documents',
-//       error
-//     })
-//   }
-// })
+router.get('/notas', verificarAuth , async(req, res) => {
+  // const _id = req.params.id
+  const usuarioId = req.usuario._id
+  try {
+    const notasDB = await Nota.find({usuarioId})
+    res.json(notasDB)
+  } catch (error) {
+    return res.status(400).json({
+      mensaje: 'something was wrong getting all documents',
+      error
+    })
+  }
+})
 
 // Get con paginacion
 router.get('/nota', verificarAuth , async(req, res) => {
   // const _id = req.params.id
 
   const usuarioId = req.usuario._id
-  const limit = Number(req.query.limit) || 5
+  const limit = Number(req.query.limit) || 10
   const skip = Number(req.query.skip) || 0
 
   try {
@@ -106,7 +105,6 @@ router.delete('/nota/:id', async(req, res) => {
 })
 
 // Put actualizar una nota
-
 router.put('/nota/:id', async(req, res) => {
   const _id = req.params.id
   const body = req.body

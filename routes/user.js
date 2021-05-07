@@ -1,7 +1,7 @@
 import express from 'express'
 const router = express.Router()
 
-import fileUpload from 'express-fileupload'
+// import fileUpload from 'express-fileupload'
 const jwt = require('jsonwebtoken')
 
 // Importar el modelo User

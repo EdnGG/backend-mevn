@@ -1,7 +1,7 @@
 import express from 'express'
 const router = express.Router()
 
-const {verificarAuth, verificarAdministrador } = require('../middlewares/autenticacion')
+const {verificarAuth, verificarAdministrador } = require('../middlewares/auth')
 
 // Importar el modelo nota
 import Nota from '../models/nota.js'

@@ -9,18 +9,15 @@ import fileUpload from 'express-fileupload'
 
 const app = express()
 
-// Conexion local
-const uri = 'mongodb://localhost:27017/mevn'
-
-// Conexion en la nube
-// const uri = 'mongodb+srv://user-mevn:WKBcQor9jVRWpQny@mevn-udemy.c4jbc.mongodb.net/udemy?retryWrites=true&w=majority'
+const URI_LOCAL = process.env.URI_LOCAL
+const URI_CLOUD = process.env.URI_CLOUD
 
 const options = {
   useNewUrlParser: true,
   useCreateIndex: true,
   useUnifiedTopology: true,
 }
-mongoose.connect(uri, options).then(
+mongoose.connect(URI_LOCAL, options).then(
   () => {
     console.log('conectado a Mongo DB')
   }, err => {
@@ -45,16 +42,11 @@ app.use(express.urlencoded({ extended: true }))
 // La ruta de abajo siempre debe de estar antes del middleware de la configuracion del 
 // histoy Middleware para vue.js
 
-// app.get('/', (req, res) => {
-//   res.send('hello world!!!')
-//   console.log('HELLO WORLD from console')
-// })
 
-app.use('/api', require('./routes/nota'))
-app.use('/api', require('./routes/user'))
-app.use('/api', require('./routes/upload'))
-app.use('/api/login', require('./routes/login'))
-// app.use('/api/upload', require('./routes/upload'))
+app.use( require('./routes/nota') )
+app.use( require('./routes/user') )
+app.use( require('./routes/upload'))
+// app.use('/api/login', require('./routes/login'))
 
 // Midleware para vue.js router modo history
 const history = require('connect-history-api-fallback')
@@ -70,15 +62,3 @@ app.listen(app.get('Port'), () => {
   console.log('port listeninig on: ', app.get('Port') )
 })
 
-
-/*
-npm i mongoose-unique-validator --save
-*/
-
-
-/*
-
-note # 2
-description # 2
-
-*/

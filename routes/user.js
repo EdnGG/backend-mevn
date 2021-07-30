@@ -1,81 +1,113 @@
 import express from 'express'
 const router = express.Router()
 
-// import fileUpload from 'express-fileupload'
 const jwt = require('jsonwebtoken')
 
-// Importar el modelo User
-import User from '../models/user.js'
+const { check } = require('express-validator');
 
-const {verificarAuth, verificarAdministrador } = require('../middlewares/autenticacion')
+const { googleSignin } = require('../controllers/auth');
+
+
+const {verificarAuth, verificarAdministrador } = require('../middlewares/auth')
+
+// User model
+import User from '../models/user.js'
 
 // hash Password
 const bcrypt = require('bcrypt')
 const saltRounds = 10
+
 //Filtering fields on http-PUT
-const _ = require('underscore')
+// const _ = require('underscore')
 
-// router.use(fileUpload({ useTempFiles: true }))
-// POST  New User
-router.post('/signup', async (req, res) => {
-
-  const body = {
-    nombre: req.body.nombre,
-    email: req.body.email,
-    role: req.body.role,
-    // pass: req.body.pass
-  }
-  // Encriptando el password
-  body.pass = bcrypt.hashSync(req.body.pass, saltRounds)
+// POST Login
+router.post('/login', async (req, res) => {
+  const body = req.body
   try {
+    // Validating email
+    const userDB = await User.findOne({ email: body.email })
+    if (!userDB) {
+      return res.status(400).json({
+        message: 'Email not found'
+      })
+    } 
 
-/************************** */
-  const usuarioDB = await User.create(body)
-    res.json(usuarioDB)
+    // Validating Password
+    if (!bcrypt.compareSync(body.pass, userDB.pass)) {
+      return res.status(400).json({
+        message: 'Wrong password '
+      })
+    }
 
-    // res.json({
-    //   usuarioDB,
-    //   token
-    // })
+    // Generating token
+    const token = jwt.sign({
+      data: userDB
+    }, process.env.SECRETORPRIVATEKEY , {expiresIn: '4h'})
 
+    res.json({
+      userDB,
+      token
+    })
 
-  } catch (error) {
-    return res.status(500).json({
-      mensaje: 'Something was wrong',
+  } catch (err) {
+    return res.status(400).json({
+      mensaje: 'Unable to create new user',
       error
     })
   }
 })
 
+// POST  New User (Google Login)
+router.post('/google', googleSignin);
 
+// POST  New User (Signup)
+router.post('/signup', async (req, res) => {
 
-// PUT User (Actualizar usuario)
-router.put('/user/:id', [verificarAuth, verificarAdministrador], async(req, res) => { 
-  const _id = req.params.id
-  /*
-  con 'underscore' limitamos los campos que el usuario puede modificar
-  '_.pick()'
-  */
-  const body = _.pick(req.body, ['nombre', 'email', 'pass', 'activo'])
-  if (body.pass) {
-    body.pass = bcrypt.hashSync(req.body.pass, saltRounds)
+  const body = {
+    name: req.body.name,
+    email: req.body.email,
+    role: req.body.role,
   }
+  // Encriptando el password
   try {
-    /*
-      En esta parte: {new: true} es necesaria, de lo contrario nos devolveria
-      el usuario sin actualizar
-      En esta parte: {runValidators: true} es para que valide los roles
-    */
-    const usuarioDB = await User.findByIdAndUpdate(_id, body, { new: true, runValidators: true })
-    return res.json(usuarioDB)
-    
-  } catch (error) {
+
+    body.pass = bcrypt.hashSync(req.body.pass, saltRounds)
+
+    if (!body.name && !req.body.pass && !body.email) {
+      return res.status(400).json({
+        message: 'Please fill up all fields correctly'
+      })
+    }
+
+    if (!body.name ) {
+      return res.status(400).json({
+        message: 'Name is required'
+      })
+    }
+  
+    if (!body.email) {
+      return res.status(400).json({
+        message: 'Email is required'
+      })
+    }
+
+    if (!req.body.pass) {
+      return res.status(400).json({
+        message: 'Password is required'
+      })
+    }
+
+    bcrypt.hashSync(req.body.pass, saltRounds)
+
+  const userDB = await User.create(body)
+    res.json(userDB)
+
+  } catch (err) {
     return res.status(500).json({
-      mensaje: 'Something was wrong',
-      error
+      message: 'Please fiil up all fields',
+      err
     })
   }
-
 })
 
 module.exports = router

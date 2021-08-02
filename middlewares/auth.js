@@ -9,7 +9,7 @@ const verificarAuth = (req, res, next) => {
         mensaje: 'Invalid user',
       })
     }
-    req.usuario = decoded.data
+    req.usuario = decoded.data 
 
   next()
   })

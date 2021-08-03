@@ -8,7 +8,9 @@ const todoSchema = new Schema({
   // description: String,
   usuarioId: String,
   date: { type: Date, default: Date.now },
-  active: { type: Boolean, default: true}
+  active: { type: Boolean, default: true},
+  done: { type: Boolean, default: false},
+  dueDate: { type: Date, default: Date.now },
 })
 
 // Convertir a modelo
